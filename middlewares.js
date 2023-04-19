@@ -27,10 +27,10 @@ export const testCaseMiddleware = function(request, response, next) {
     const endpoint = request.url.slice(0, request.url.indexOf('?'));
     const method = request.method;
     const params = { magic: request.query.magic };
-
     if (shouldSetUpTestCase(userId, deviceId, endpoint, method)) {
         console.log("Setting up test case ...");
         const testCase = setUpTestCase(userId, deviceId, endpoint, method, params);
+        console.log("Running test case ...");
         runTestCase(testCase);
     } else {
         console.log("Should NOT set up test case");

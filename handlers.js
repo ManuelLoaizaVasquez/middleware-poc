@@ -85,7 +85,7 @@ export const updateTestSuiteInstance = function(updatedTestSuiteInstance) {
     for (const [index, testSuiteInstance] of testSuiteInstances.entries()) {
         if (testSuiteInstance.id === updatedTestSuiteInstance.id) {
             testSuiteInstances[index] = updatedTestSuiteInstance;
-            console.log('Test suite instance updaetd:', updatedTestSuiteInstance);
+            console.log('Test suite instance updated:', updatedTestSuiteInstance);
             break;
         }
     }

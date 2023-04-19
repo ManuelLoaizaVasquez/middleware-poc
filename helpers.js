@@ -15,7 +15,7 @@ export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
     const userConfig = findUserConfig(userId, deviceId, testCaseTemplate.testSuiteTemplateId, "active");
     const testCaseTemplates = findTestCaseTemplates(testCaseTemplate.testSuiteTemplateId);
 
-    // TODO(Manuel): numberOfSetUpTestCases and numberOfTestCases
+    // TODO(Manuel): status, numberOfSetUpTestCases and numberOfTestCases
     // should be properties that are calculated in runtime
     const newTestSuiteInstance =
     {
@@ -34,6 +34,11 @@ export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
 };
 
 export const shouldSetUpTestSuite = function (userId, deviceId, endpoint, method) {
+    const runningTestSuiteInstance = findRunningTestSuiteInstance(userId, deviceId);
+    if (runningTestSuiteInstance !== undefined) {
+        return false;
+    }
+
     // Find a test case template associated with the current request
     // which is the first one of a test suite template
     const testCaseTemplate = findFirstTestCaseTemplate(endpoint, method);
@@ -53,6 +58,7 @@ export const runTestCase = function(testCase) {
     } else {
         updatedTestCase.status = 'failed';
     }
+    console.log("Test case result:", updatedTestCase.status);
     updateTestCaseInstance(updatedTestCase);
     updateTestSuiteInstanceDueToTestCaseUpdate(updatedTestCase);
     return updatedTestCase;
