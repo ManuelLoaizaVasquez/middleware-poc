@@ -1,10 +1,10 @@
-import { testSuiteMiddleware } from './middlewares.js';
+import { testSuiteMiddleware, testCaseMiddleware } from './middlewares.js';
 import express from 'express';
 
 const app = express();
 const port = 3000;
 
-app.use(testSuiteMiddleware);
+app.use(testSuiteMiddleware, testCaseMiddleware);
 
 app.post('/signup', (request, response) => {
     console.log('signup');
