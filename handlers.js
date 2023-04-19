@@ -1,4 +1,9 @@
-import { userConfigs, testCaseTemplates, testSuiteInstances } from "./schemas.js"
+import {
+    userConfigs,
+    testCaseTemplates,
+    testSuiteInstances,
+    testCaseInstances
+} from "./schemas.js"
 
 export const findUserConfigById = function(userConfigId) {
     for (const userConfig of userConfigs) {
@@ -42,7 +47,7 @@ export const findFirstTestCaseTemplate = function(endpoint, method) {
             return testCaseTemplate;
         }
     }
-}
+};
 
 export const findTestCaseTemplate = function(testSuiteTemplateId, endpoint, method, order) {
     for (const testCaseTemplate of testCaseTemplates) {
@@ -53,7 +58,7 @@ export const findTestCaseTemplate = function(testSuiteTemplateId, endpoint, meth
             return testCaseTemplate;
         }
     }
-}
+};
 
 export const findUserConfig = function(userId, deviceId, testSuiteTemplateId, status) {
     for (const userConfig of userConfigs) {
@@ -64,4 +69,48 @@ export const findUserConfig = function(userId, deviceId, testSuiteTemplateId, st
             return userConfig;
         }
     }
+};
+
+export const updateTestCaseInstance = function(updatedTestCaseInstance) {
+    for (const [index, testCaseInstance] of testCaseInstances.entries()) {
+        if (testCaseInstance.id === updatedTestCaseInstance.id) {
+            testCaseInstances[index] = updatedTestCaseInstance;
+            console.log('Test case instance updated:', updatedTestCaseInstance);
+            break;
+        }
+    }
+};
+
+export const updateTestSuiteInstance = function(updatedTestSuiteInstance) {
+    for (const [index, testSuiteInstance] of testSuiteInstances.entries()) {
+        if (testSuiteInstance.id === updatedTestSuiteInstance.id) {
+            testSuiteInstances[index] = updatedTestSuiteInstance;
+            console.log('Test suite instance updaetd:', updatedTestSuiteInstance);
+            break;
+        }
+    }
+}
+
+export const findTestSuiteInstanceById = function(testSuiteInstanceId) {
+    for (const testSuiteInstance of testSuiteInstances) {
+        if (testSuiteInstance.id === testSuiteInstanceId) {
+            return testSuiteInstance;
+        }
+    }
+}
+
+export const updateTestSuiteInstanceDueToTestCaseUpdate = function(updatedTestCaseInstance) {
+    const testSuiteInstance = findTestSuiteInstanceById(updatedTestCaseInstance.testSuiteInstanceId);
+    if (testSuiteInstance === undefined) {
+        return;
+    }
+    testSuiteInstance.numberOfSetUpTestCases += 1;
+    if (updatedTestCaseInstance.status === 'failed') {
+        testSuiteInstance.status = 'failed';
+        testSuiteInstance.endTimestamp = Date.now();
+    } else if (testSuiteInstance.numberOfSetUpTestCases === testSuiteInstance.numberOfTestCases) {
+        testSuiteInstance.status = 'passed';
+        testSuiteInstance.endTimestamp = Date.now();
+    }
+    updateTestSuiteInstance(testSuiteInstance);
 }

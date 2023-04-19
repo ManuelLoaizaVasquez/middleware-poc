@@ -6,6 +6,8 @@ import {
     findTestCaseTemplates,
     findRunningTestSuiteInstance,
     findUserConfigById,
+    updateTestSuiteInstanceDueToTestCaseUpdate,
+    updateTestCaseInstance
 } from './handlers.js';
 
 export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
@@ -29,7 +31,7 @@ export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
     testSuiteInstances.push(newTestSuiteInstance);
     console.log("New test suite instance created:", newTestSuiteInstance);
     return newTestSuiteInstance;
-}
+};
 
 export const shouldSetUpTestSuite = function (userId, deviceId, endpoint, method) {
     // Find a test case template associated with the current request
@@ -44,17 +46,16 @@ export const shouldSetUpTestSuite = function (userId, deviceId, endpoint, method
     return userConfig !== undefined;
 };
 
-export const updateTestSuite = function(testCase) {
-    console.log("TODO");
-}
-
 export const runTestCase = function(testCase) {
+    const updatedTestCase = testCase;
     if (testCase.params.magic <= 42) {
-        testCase.status = 'passed';
+        updatedTestCase.status = 'passed';
     } else {
-        testCase.status = 'failed';
+        updatedTestCase.status = 'failed';
     }
-    return testCase;
+    updateTestCaseInstance(updatedTestCase);
+    updateTestSuiteInstanceDueToTestCaseUpdate(updatedTestCase);
+    return updatedTestCase;
 };
 
 export const setUpTestCase = function(userId, deviceId, endpoint, method, params) {
@@ -74,7 +75,7 @@ export const setUpTestCase = function(userId, deviceId, endpoint, method, params
     testCaseInstances.push(newTestCaseInstance);
     console.log("New test case instance created:", newTestCaseInstance);
     return newTestCaseInstance;
-}
+};
 
 export const shouldSetUpTestCase = function (userId, deviceId, endpoint, method) {
     const runningTestSuiteInstance = findRunningTestSuiteInstance(userId, deviceId);

@@ -3,8 +3,7 @@ import {
     setUpTestSuite,
     shouldSetUpTestCase,
     setUpTestCase,
-    runTestCase,
-    updateTestSuite
+    runTestCase
 } from "./helpers.js";
 
 export const testSuiteMiddleware = function(request, response, next) {
@@ -32,8 +31,7 @@ export const testCaseMiddleware = function(request, response, next) {
     if (shouldSetUpTestCase(userId, deviceId, endpoint, method)) {
         console.log("Setting up test case ...");
         const testCase = setUpTestCase(userId, deviceId, endpoint, method, params);
-        const judgedTestCase = runTestCase(testCase);
-        updateTestSuite(judgedTestCase);
+        runTestCase(testCase);
     } else {
         console.log("Should NOT set up test case");
     }
