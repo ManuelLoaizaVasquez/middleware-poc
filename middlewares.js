@@ -3,13 +3,14 @@ import {
     setUpTestSuite,
     shouldSetUpTestCase,
     setUpTestCase,
-    runTestCase
+    runTestCase,
+    getBaseUrl
 } from "./helpers.js";
 
 export const testSuiteMiddleware = function(request, response, next) {
-    const userId = request.query.userId;
-    const deviceId = request.query.deviceId;
-    const endpoint = request.url.slice(0, request.url.indexOf('?'));
+    const userId = request.body.userId;
+    const deviceId = request.body.deviceId;
+    const endpoint = getBaseUrl(request.url);
     const method = request.method;
 
     if (shouldSetUpTestSuite(userId, deviceId, endpoint, method)) {
@@ -22,19 +23,19 @@ export const testSuiteMiddleware = function(request, response, next) {
 };
 
 export const testCaseMiddleware = function(request, response, next) {
-    const userId = request.query.userId;
-    const deviceId = request.query.deviceId;
-    const endpoint = request.url.slice(0, request.url.indexOf('?'));
+    const userId = request.body.userId;
+    const deviceId = request.body.deviceId;
+    const endpoint = getBaseUrl(request.url);
     const method = request.method;
-    const params = { magic: request.query.magic };
+    const queryParams = request.query;
+    const requestBody = request.body;
     if (shouldSetUpTestCase(userId, deviceId, endpoint, method)) {
         console.log("Setting up test case ...");
-        const testCase = setUpTestCase(userId, deviceId, endpoint, method, params);
+        const testCase = setUpTestCase(userId, deviceId, endpoint, method, queryParams, requestBody);
         console.log("Running test case ...");
         runTestCase(testCase);
     } else {
         console.log("Should NOT set up test case");
     }
-
     next();
 };

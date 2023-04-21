@@ -104,11 +104,11 @@ export const updateTestSuiteInstanceDueToTestCaseUpdate = function(updatedTestCa
     if (testSuiteInstance === undefined) {
         return;
     }
-    testSuiteInstance.numberOfSetUpTestCases += 1;
+    testSuiteInstance.numberOfFinishedTestCases += 1;
     if (updatedTestCaseInstance.status === 'failed') {
         testSuiteInstance.status = 'failed';
         testSuiteInstance.endTimestamp = Date.now();
-    } else if (testSuiteInstance.numberOfSetUpTestCases === testSuiteInstance.numberOfTestCases) {
+    } else if (testSuiteInstance.numberOfFinishedTestCases === testSuiteInstance.numberOfTestCases) {
         testSuiteInstance.status = 'passed';
         testSuiteInstance.endTimestamp = Date.now();
     }

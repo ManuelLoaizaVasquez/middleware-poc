@@ -10,12 +10,18 @@ import {
     updateTestCaseInstance
 } from './handlers.js';
 
+export const getBaseUrl = function(url) {
+    const questionMarkIndex = url.indexOf('?');
+    if (questionMarkIndex === -1) return url;
+    return url.slice(0, questionMarkIndex);
+}
+
 export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
     const testCaseTemplate = findFirstTestCaseTemplate(endpoint, method);
     const userConfig = findUserConfig(userId, deviceId, testCaseTemplate.testSuiteTemplateId, "active");
     const testCaseTemplates = findTestCaseTemplates(testCaseTemplate.testSuiteTemplateId);
 
-    // TODO(Manuel): status, numberOfSetUpTestCases and numberOfTestCases
+    // TODO(Manuel): status, numberOfFinishedTestCases and numberOfTestCases
     // should be properties that are calculated in runtime
     const newTestSuiteInstance =
     {
@@ -24,7 +30,7 @@ export const setUpTestSuite = function(userId, deviceId, endpoint, method) {
         status: 'running',
         startTimestamp: Date.now(),
         endTimestamp: null,
-        numberOfSetUpTestCases: 0,
+        numberOfFinishedTestCases: 0,
         numberOfTestCases: testCaseTemplates.length
     };
 
@@ -53,7 +59,7 @@ export const shouldSetUpTestSuite = function (userId, deviceId, endpoint, method
 
 export const runTestCase = function(testCase) {
     const updatedTestCase = testCase;
-    if (testCase.params.magic <= 42) {
+    if (testCase.requestBody.magic <= 42) {
         updatedTestCase.status = 'passed';
     } else {
         updatedTestCase.status = 'failed';
@@ -64,7 +70,7 @@ export const runTestCase = function(testCase) {
     return updatedTestCase;
 };
 
-export const setUpTestCase = function(userId, deviceId, endpoint, method, params) {
+export const setUpTestCase = function(userId, deviceId, endpoint, method, queryParams, requestBody) {
     const runningTestSuiteInstance = findRunningTestSuiteInstance(userId, deviceId);
 
     const newTestCaseInstance = {
@@ -74,8 +80,9 @@ export const setUpTestCase = function(userId, deviceId, endpoint, method, params
         startTimestamp: Date.now(),
         endpoint: endpoint,
         method: method,
-        params: params,
-        order: runningTestSuiteInstance.numberOfSetUpTestCases + 1
+        queryParams: queryParams,
+        requestBody: requestBody,
+        order: runningTestSuiteInstance.numberOfFinishedTestCases + 1
     };
 
     testCaseInstances.push(newTestCaseInstance);
@@ -90,11 +97,15 @@ export const shouldSetUpTestCase = function (userId, deviceId, endpoint, method)
     }
     
     const userConfig = findUserConfigById(runningTestSuiteInstance.userConfigId);
-
     if (userConfig === undefined) {
         return false;
     }
 
-    const testCaseTemplate = findTestCaseTemplate(userConfig.testSuiteTemplateId, endpoint, method, runningTestSuiteInstance.numberOfSetUpTestCases + 1);
+    const testCaseTemplate = findTestCaseTemplate(
+        userConfig.testSuiteTemplateId,
+        endpoint,
+        method,
+        runningTestSuiteInstance.numberOfFinishedTestCases + 1
+    );
     return testCaseTemplate !== undefined;
 };

@@ -1,10 +1,16 @@
 import { testSuiteMiddleware, testCaseMiddleware } from './middlewares.js';
 import express from 'express';
+import bodyParser from 'body-parser';   
 
 const app = express();
 const port = 3000;
 
-app.use(testSuiteMiddleware, testCaseMiddleware);
+app.use(
+    bodyParser.json(),
+    express.json(),
+    testSuiteMiddleware,
+    testCaseMiddleware
+);
 
 app.post('/signup', (request, response) => {
     console.log('signup');
