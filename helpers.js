@@ -10,6 +10,9 @@ import {
     updateTestCaseInstance
 } from './handlers.js';
 
+import { Validator } from 'jsonschema';
+const validator = new Validator();
+
 export const getBaseUrl = function(url) {
     const questionMarkIndex = url.indexOf('?');
     if (questionMarkIndex === -1) return url;
@@ -57,9 +60,17 @@ export const shouldSetUpTestSuite = function (userId, deviceId, endpoint, method
     return userConfig !== undefined;
 };
 
-export const runTestCase = function(testCase) {
+export const runTestCase = function(testCase, testCaseTemplate) {
     const updatedTestCase = testCase;
-    if (testCase.requestBody.magic <= 42) {
+    let validQueryParams = true;
+    if (testCaseTemplate.queryParams !== undefined) {
+        validQueryParams = validator.validate(testCase.queryParams, testCaseTemplate.queryParams).valid;
+    }
+    let validRequestBody = true;
+    if (testCaseTemplate.requestBody !== undefined) {
+        validRequestBody = validator.validate(testCase.requestBody, testCaseTemplate.requestBody).valid;
+    }
+    if (validQueryParams && validRequestBody) {
         updatedTestCase.status = 'passed';
     } else {
         updatedTestCase.status = 'failed';
@@ -93,12 +104,12 @@ export const setUpTestCase = function(userId, deviceId, endpoint, method, queryP
 export const shouldSetUpTestCase = function (userId, deviceId, endpoint, method) {
     const runningTestSuiteInstance = findRunningTestSuiteInstance(userId, deviceId);
     if (runningTestSuiteInstance === undefined) {
-        return false;
+        return [false, undefined];
     }
     
     const userConfig = findUserConfigById(runningTestSuiteInstance.userConfigId);
     if (userConfig === undefined) {
-        return false;
+        return [false, undefined];
     }
 
     const testCaseTemplate = findTestCaseTemplate(
@@ -107,5 +118,5 @@ export const shouldSetUpTestCase = function (userId, deviceId, endpoint, method)
         method,
         runningTestSuiteInstance.numberOfFinishedTestCases + 1
     );
-    return testCaseTemplate !== undefined;
+    return [testCaseTemplate !== undefined, testCaseTemplate];
 };

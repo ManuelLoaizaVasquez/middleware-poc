@@ -9,7 +9,7 @@ import {
 
 export const testSuiteMiddleware = function(request, response, next) {
     const userId = request.body.userId;
-    const deviceId = request.body.deviceId;
+    const deviceId = request.query.deviceId;
     const endpoint = getBaseUrl(request.url);
     const method = request.method;
 
@@ -24,16 +24,17 @@ export const testSuiteMiddleware = function(request, response, next) {
 
 export const testCaseMiddleware = function(request, response, next) {
     const userId = request.body.userId;
-    const deviceId = request.body.deviceId;
+    const deviceId = request.query.deviceId;
     const endpoint = getBaseUrl(request.url);
     const method = request.method;
     const queryParams = request.query;
     const requestBody = request.body;
-    if (shouldSetUpTestCase(userId, deviceId, endpoint, method)) {
+    const [shouldSetUpAndRunTestCase, testCaseTemplate] = shouldSetUpTestCase(userId, deviceId, endpoint, method);
+    if (shouldSetUpAndRunTestCase) {
         console.log("Setting up test case ...");
         const testCase = setUpTestCase(userId, deviceId, endpoint, method, queryParams, requestBody);
         console.log("Running test case ...");
-        runTestCase(testCase);
+        runTestCase(testCase, testCaseTemplate);
     } else {
         console.log("Should NOT set up test case");
     }

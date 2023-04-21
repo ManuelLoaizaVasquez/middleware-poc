@@ -57,6 +57,14 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/signup",
         "method": "POST",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" },
+                "defaultCategories": { "type": "string" }
+            },
+            "required": ["deviceId"]
+        },
         "order": 1
     },
     {
@@ -64,6 +72,15 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/user/me",
         "method": "GET",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" },
+                "onboardingCategories": { "type": "string" },
+                "headlineCategories": { "type": "string" }
+            },
+            "required": ["deviceId", "onboardingCategories", "headlineCategories"]
+        },
         "order": 2
     },
     {
@@ -71,6 +88,20 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/headlineCategories",
         "method": "PUT",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" },
+            },
+            "required": ["deviceId"]
+        },
+        "requestBody": {
+            "type": "object",
+            "properties": {
+                "favorites": { "type": "number", "minimum": 0 }
+            },
+            "required": ["favorites"]
+        },
         "order": 3
     },
     {
@@ -78,6 +109,13 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/onboardingTags",
         "method": "GET",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" }
+            },
+            "required": ["deviceId"]
+        },
         "order": 4
     },
     {
@@ -85,6 +123,13 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/userTopics",
         "method": "PUT",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" }
+            },
+            "required": ["deviceId"]
+        },
         "order": 5
     },
     {
@@ -92,6 +137,13 @@ export const testCaseTemplates = [
         "testSuiteTemplateId": "test-suite-template-id-1",
         "endpoint": "/user/me",
         "method": "GET",
+        "queryParams": {
+            "type": "object",
+            "properties": {
+                "deviceId": { "type": "string" }
+            },
+            "required": ["deviceId"]
+        },
         "order": 6
     }
 ];
