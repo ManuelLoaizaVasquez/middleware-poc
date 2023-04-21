@@ -55,7 +55,7 @@ export const testCaseTemplates = [
     {
         "id": "test-case-template-id-1",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/signup",
+        "endpoint": "/api/v1/signup",
         "method": "POST",
         "queryParams": {
             "type": "object",
@@ -70,23 +70,24 @@ export const testCaseTemplates = [
     {
         "id": "test-case-template-id-2",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/user/me",
+        "endpoint": "/api/v1/onboarding",
         "method": "GET",
         "queryParams": {
             "type": "object",
             "properties": {
                 "deviceId": { "type": "string" },
-                "onboardingCategories": { "type": "string" },
-                "headlineCategories": { "type": "string" }
+                "imageType": { "type": "string" },
+                "imageSize": { "type": "string" },
+                "type": { "type": "string", "const": "hsChannels" }
             },
-            "required": ["deviceId", "onboardingCategories", "headlineCategories"]
+            "required": ["deviceId", "imageType", "imageSize", "type"]
         },
         "order": 2
     },
     {
         "id": "test-case-template-id-3",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/headlineCategories",
+        "endpoint": "/api/v1/userHSChannels",
         "method": "PUT",
         "queryParams": {
             "type": "object",
@@ -107,35 +108,40 @@ export const testCaseTemplates = [
     {
         "id": "test-case-template-id-4",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/onboardingTags",
+        "endpoint": "/api/v1/user/me",
         "method": "GET",
         "queryParams": {
             "type": "object",
             "properties": {
-                "deviceId": { "type": "string" }
+                "deviceId": { "type": "string" },
+                "fields": { "type": "string", "const": "location" },
+                "timezoneId": { "type": "string" }
             },
-            "required": ["deviceId"]
+            "required": ["deviceId", "fields", "timezoneId"]
         },
         "order": 4
     },
     {
         "id": "test-case-template-id-5",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/userTopics",
-        "method": "PUT",
+        "endpoint": "/api/v1/onboarding",
+        "method": "GET",
         "queryParams": {
             "type": "object",
             "properties": {
-                "deviceId": { "type": "string" }
+                "deviceId": { "type": "string" },
+                "imageType": { "type": "string" },
+                "imageSize": { "type": "string" },
+                "type": { "type": "string", "const": "publishers" }
             },
-            "required": ["deviceId"]
+            "required": ["deviceId", "imageType", "imageSize", "type"]
         },
         "order": 5
     },
     {
         "id": "test-case-template-id-6",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/user/me",
+        "endpoint": "/api/v1/user/me",
         "method": "GET",
         "queryParams": {
             "type": "object",

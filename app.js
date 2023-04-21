@@ -12,19 +12,24 @@ app.use(
     testCaseMiddleware
 );
 
-app.post('/signup', (request, response) => {
+app.post('/api/v1/signup', (request, response) => {
     console.log('signup');
     response.send('signup');
 });
 
-app.get('/user/me', (request, response) => {
-    console.log('userme');
-    response.send('userme');
+app.get('/api/v1/onboarding', (request, response) => {
+    console.log('onboarding');
+    response.send('onboarding');
 });
 
-app.put('/headlineCategories', (request, response) => {
-    console.log('headlineCategories');
-    response.send('headlineCategories');
+app.put('/api/v1/userHSChannels', (request, response) => {
+    console.log('userHSChannels');
+    response.send('userHSChannels');
+});
+
+app.get('/api/v1/user/me', (request, response) => {
+    console.log('userme');
+    response.send('userme');
 });
 
 app.get('/onboardingTags', (request, response) => {
