@@ -69,16 +69,30 @@ export const testCaseTemplates = [
     {
         "id": "test-case-template-id-3",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/categories",
+        "endpoint": "/headlineCategories",
         "method": "PUT",
         "order": 3
     },
     {
         "id": "test-case-template-id-4",
         "testSuiteTemplateId": "test-suite-template-id-1",
-        "endpoint": "/user/me",
+        "endpoint": "/onboardingTags",
         "method": "GET",
         "order": 4
+    },
+    {
+        "id": "test-case-template-id-5",
+        "testSuiteTemplateId": "test-suite-template-id-1",
+        "endpoint": "/userTopics",
+        "method": "PUT",
+        "order": 5
+    },
+    {
+        "id": "test-case-template-id-6",
+        "testSuiteTemplateId": "test-suite-template-id-1",
+        "endpoint": "/user/me",
+        "method": "GET",
+        "order": 6
     }
 ];
 

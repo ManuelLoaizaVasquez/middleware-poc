@@ -22,9 +22,19 @@ app.get('/user/me', (request, response) => {
     response.send('userme');
 });
 
-app.put('/categories', (request, response) => {
-    console.log('categories');
-    response.send('categories');
+app.put('/headlineCategories', (request, response) => {
+    console.log('headlineCategories');
+    response.send('headlineCategories');
+});
+
+app.get('/onboardingTags', (request, response) => {
+    console.log('onboardingTags');
+    response.send('onboardingTags');
+});
+
+app.put('/userTopics', (request, response) => {
+    console.log('userTopics');
+    response.send('userTopics');
 });
 
 app.listen(port, () => {
